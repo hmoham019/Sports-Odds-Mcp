@@ -3,7 +3,7 @@ services:
     name: odds-api-mcp-server
     env: node
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node http-mcp-server.js
     plan: free
     envVars:
       - key: NODE_ENV
