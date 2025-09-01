@@ -46,7 +46,7 @@ const createServer = () => {
     title: "Sports Odds Fetcher",
     description: "Fetches sports odds from The Odds API. Gets all current games for a specified sport with odds from US bookmakers.",
     inputSchema: {
-      sport: z.enum(["baseball_mlb", "basketball_nba", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl", "soccer_epl"])
+      sport: z.enum(["baseball_mlb", "basketball_nba", "basketball_wnba", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl", "soccer_epl"])
         .describe("The sport key (e.g., 'baseball_mlb', 'basketball_nba', 'basketball_wnba', 'americanfootball_nfl'). Use 'baseball_mlb' for MLB games, 'basketball_wnba' for WNBA games."),
       markets: z.array(z.string())
         .optional()
