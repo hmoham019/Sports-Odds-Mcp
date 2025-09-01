@@ -2,7 +2,7 @@
   "name": "oddsapi-mcp-server",
   "version": "1.0.0",
   "description": "An MCP server for the Odds API project.",
-  "main": "dist/mcp-server.js",
+  "main": "http-mcp-server.js",
   "type": "module",
   "bin": {
     "oddsapi-mcp-server": "./dist/mcp-server.js"
@@ -15,7 +15,7 @@
     "test-mcp": "npx @modelcontextprotocol/inspector node C:/Users/Harun/Desktop/OddsApi/dist/mcp-server.js"
   },
   "files": [
-    "dist"
+    "http-mcp-server.js"
   ],
   "keywords": [],
   "author": "",
