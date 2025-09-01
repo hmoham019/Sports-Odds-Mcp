@@ -5,14 +5,10 @@
   "main": "http-mcp-server.js",
   "type": "module",
   "bin": {
-    "oddsapi-mcp-server": "./dist/mcp-server.js"
+    "oddsapi-mcp-server": "./http-mcp-server.js"
   },
   "scripts": {
-    "build": "node build.js",
-    "start": "node http-mcp-server.js",
-    "dev": "node src/mcp-server.js",
-    "http-server": "node http-mcp-server.js",
-    "test-mcp": "npx @modelcontextprotocol/inspector node C:/Users/Harun/Desktop/OddsApi/dist/mcp-server.js"
+    "start": "node http-mcp-server.js"
   },
   "files": [
     "http-mcp-server.js"
