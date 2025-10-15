@@ -18,21 +18,19 @@ This project provides a comprehensive integration with The Odds API (https://the
 
 ### API Key Configuration
 
-The project uses The Odds API key: `a5a760342df8774d16f2e6aed9aaeffe`
-
-This key has been updated across all files in the project, including:
-- Environment variables (`.env`)
-- Configuration files (`src/config.js`, `dist/config.js`)
-- All server implementations
-- Test utilities
+The project requires a The Odds API key. Get your free API key from [The Odds API](https://the-odds-api.com/).
 
 ### Environment Variables
 
 Create a `.env` file in the root directory:
 
 ```
-ODDS_API_KEY=a5a760342df8774d16f2e6aed9aaeffe
+ODDS_API_KEY=your_api_key_here
+PORT=10000
+NODE_ENV=production
 ```
+
+**Important**: Never commit your `.env` file to version control. Use `env.example` as a template.
 
 ## Available Sports
 

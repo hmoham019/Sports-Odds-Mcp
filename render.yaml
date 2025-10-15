@@ -10,3 +10,5 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: ODDS_API_KEY
+        value: a5a760342df8774d16f2e6aed9aaeffe

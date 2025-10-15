@@ -66,7 +66,7 @@ const createServer = () => {
       console.error('========================\n');
       
       // Make direct API call using the correct Odds API structure
-      const apiKey = 'e2589acbc9f5ed09664e15a3fd90682d';
+      const apiKey = process.env.ODDS_API_KEY || 'a5a760342df8774d16f2e6aed9aaeffe';
       const baseUrl = 'https://api.the-odds-api.com/v4';
       
       const url = `${baseUrl}/sports/${sport}/odds/?apiKey=${apiKey}&regions=${regions}&markets=${markets.join(',')}&oddsFormat=decimal&dateFormat=iso`;
@@ -161,7 +161,7 @@ const createServer = () => {
       console.error('Team filter:', team_filter);
       console.error('========================\n');
       
-      const apiKey = 'e2589acbc9f5ed09664e15a3fd90682d';
+      const apiKey = process.env.ODDS_API_KEY || 'a5a760342df8774d16f2e6aed9aaeffe';
       const baseUrl = 'https://api.the-odds-api.com/v4';
       
       // Step 1: Get all events for the sport
