@@ -46,12 +46,12 @@ const createServer = () => {
     title: "Sports Odds Fetcher",
     description: "Fetches sports odds from The Odds API. Gets all current games for a specified sport with odds from US bookmakers.",
     inputSchema: {
-      sport: z.enum(["baseball_mlb", "basketball_nba", "basketball_wnba", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl", "soccer_epl"])
-        .describe("The sport key (e.g., 'baseball_mlb', 'basketball_nba', 'basketball_wnba', 'americanfootball_nfl'). Use 'baseball_mlb' for MLB games, 'basketball_wnba' for WNBA games."),
+      sport: z.enum(["baseball_mlb", "basketball_nba", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl", "soccer_epl"])
+        .describe("The sport key (e.g., 'baseball_mlb', 'basketball_nba', 'basketball_wnba', 'americanfootball_nfl', 'icehockey_nhl'). Use 'baseball_mlb' for MLB games, 'basketball_wnba' for WNBA games, 'americanfootball_nfl' for NFL games, 'icehockey_nhl' for NHL games."),
       markets: z.array(z.string())
         .optional()
         .default(["h2h"])
-        .describe("Market types to fetch (e.g., 'h2h' for moneyline, 'spreads', 'totals'). For player props, check API docs for specific keys."),
+        .describe("Market types to fetch (e.g., 'h2h' for moneyline, 'spreads', 'totals'). For NFL: add 'h2h_q1', 'spreads_q1', 'totals_q1' for quarters. For NHL: add 'h2h_p1', 'spreads_p1', 'totals_p1' for periods. For player props, check API docs for specific keys."),
       regions: z.string()
         .optional()
         .default("us")
@@ -131,16 +131,28 @@ const createServer = () => {
   // Register the player props tool  
   server.registerTool("fetch_player_props", {
     title: "Player Props Fetcher", 
-    description: "Fetches player props for specific MLB or WNBA games from DraftKings using the correct event-specific endpoint",
+    description: "Fetches player props for specific MLB, WNBA, NFL, or NHL games from DraftKings using the correct event-specific endpoint",
     inputSchema: {
-      sport: z.enum(["baseball_mlb", "basketball_wnba"]).describe("Sport key - baseball_mlb or basketball_wnba supported"),
-      markets: z.array(z.string()).optional().default(["batter_home_runs", "pitcher_strikeouts"]).describe("Player prop markets. MLB: batter_home_runs, batter_hits, batter_total_bases, batter_rbis, pitcher_strikeouts, pitcher_walks, pitcher_hits_allowed. WNBA: player_points, player_rebounds, player_assists"),
-      team_filter: z.string().optional().describe("Filter games by team name (e.g., 'Yankees', 'Blue Jays')")
+      sport: z.enum(["baseball_mlb", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl"]).describe("Sport key - baseball_mlb, basketball_wnba, americanfootball_nfl, or icehockey_nhl supported"),
+      markets: z.array(z.string()).optional().describe("Player prop markets. MLB: batter_home_runs, batter_hits, pitcher_strikeouts. WNBA: player_points, player_rebounds, player_assists. NFL: player_pass_yds, player_rush_yds, player_receptions, player_tds. NHL: player_points, player_goals, player_assists, player_shots_on_goal"),
+      team_filter: z.string().optional().describe("Filter games by team name (e.g., 'Yankees', 'Chiefs', 'Lakers', 'Bruins')")
     }
   }, async ({ sport, markets, team_filter }) => {
     // Set default markets based on sport
     if (!markets) {
-      markets = sport === "basketball_wnba" ? ["player_points", "player_rebounds", "player_assists"] : ["batter_home_runs", "pitcher_strikeouts"];
+      switch (sport) {
+        case "basketball_wnba":
+          markets = ["player_points", "player_rebounds", "player_assists"];
+          break;
+        case "americanfootball_nfl":
+          markets = ["player_pass_yds", "player_rush_yds", "player_receptions", "player_tds"];
+          break;
+        case "icehockey_nhl":
+          markets = ["player_points", "player_goals", "player_assists", "player_shots_on_goal"];
+          break;
+        default: // baseball_mlb
+          markets = ["batter_home_runs", "pitcher_strikeouts"];
+      }
     }
     try {
       console.error('\n=== PLAYER PROPS TOOL DEBUG ===');

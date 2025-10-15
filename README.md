@@ -12,26 +12,7 @@ This project provides a comprehensive integration with The Odds API (https://the
 - **MCP Protocol Support**: Tools designed to work with Model Context Protocol for AI integration
 - **DraftKings Integration**: Specific support for DraftKings sportsbook data
 
-## Project Structure
 
-```
-oddsAPi/
-├── src/
-│   ├── config.js              # Main configuration file
-│   ├── apiService.js          # Core API service functions
-│   ├── mcp-server.js          # Primary MCP server implementation
-│   ├── gameProcessor.js       # Game data processing logic
-│   └── odds-api-integration.js # Main integration script
-├── dist/
-│   ├── config.js              # Compiled configuration
-│   └── mcp-server.js          # Compiled MCP server
-├── http-mcp-server.js         # HTTP-based MCP server
-├── http-mcp-server-fixed.js   # Fixed HTTP MCP server implementation
-├── genspark-mcp-server.js     # Genspark-specific MCP server
-├── test-tool.js               # Testing utilities
-├── .env                       # Environment variables
-└── README.md                  # This file
-```
 
 ## Configuration
 
@@ -58,6 +39,7 @@ ODDS_API_KEY=a5a760342df8774d16f2e6aed9aaeffe
 The system supports the following sports:
 - `baseball_mlb` - Major League Baseball
 - `basketball_nba` - National Basketball Association
+- `basketball_wnba` - Women's National Basketball Association
 - `americanfootball_nfl` - National Football League
 - `icehockey_nhl` - National Hockey League
 - `soccer_epl` - English Premier League
@@ -68,43 +50,55 @@ The system supports the following sports:
 Fetches current odds for specified sports.
 
 **Parameters:**
-- `sport` (required): Sport key (e.g., "baseball_mlb")
+- `sport` (required): Sport key (e.g., "baseball_mlb", "americanfootball_nfl", "icehockey_nhl")
 - `markets` (optional): Array of market types (default: ["h2h"])
 - `regions` (optional): Geographic regions (default: "us")
+
+**Available Markets:**
+- **Standard**: `h2h` (moneyline), `spreads`, `totals`, `outrights`
+- **NFL Quarters**: `h2h_q1`, `h2h_q2`, `h2h_q3`, `h2h_q4`, `spreads_q1-4`, `totals_q1-4`
+- **NHL Periods**: `h2h_p1`, `h2h_p2`, `h2h_p3`, `spreads_p1-3`, `totals_p1-3`
 
 **Usage:**
 ```javascript
 {
-  "sport": "baseball_mlb",
-  "markets": ["h2h", "spreads", "totals"],
+  "sport": "americanfootball_nfl",
+  "markets": ["h2h", "spreads", "totals", "h2h_q1", "spreads_q1"],
   "regions": "us"
 }
 ```
 
 ### 2. fetch_player_props
-Fetches player proposition bets for MLB games.
+Fetches player proposition bets for MLB, WNBA, NFL, and NHL games.
 
 **Parameters:**
-- `sport` (required): Sport key (currently only "baseball_mlb")
-- `markets` (optional): Array of prop markets (default: ["batter_home_runs", "pitcher_strikeouts"])
+- `sport` (required): Sport key ("baseball_mlb", "basketball_wnba", "americanfootball_nfl", "icehockey_nhl")
+- `markets` (optional): Array of prop markets (sport-specific defaults)
 - `team_filter` (optional): Filter by team name
 
-**Available Markets:**
-- `batter_home_runs`
-- `batter_hits`
-- `batter_total_bases`
-- `batter_rbis`
-- `batter_runs_scored`
-- `pitcher_strikeouts`
-- `pitcher_walks`
-- `pitcher_hits_allowed`
+**Available Markets by Sport:**
+
+**MLB:**
+- `batter_home_runs`, `batter_hits`, `batter_total_bases`, `batter_rbis`
+- `pitcher_strikeouts`, `pitcher_walks`, `pitcher_hits_allowed`
+
+**WNBA:**
+- `player_points`, `player_rebounds`, `player_assists`, `player_blocks`, `player_steals`
+
+**NFL:**
+- `player_pass_yds`, `player_pass_tds`, `player_rush_yds`, `player_rush_tds`
+- `player_receptions`, `player_reception_yds`, `player_sacks`, `player_tackles`
+
+**NHL:**
+- `player_points`, `player_goals`, `player_assists`, `player_shots_on_goal`
+- `player_blocked_shots`, `player_total_saves`
 
 **Usage:**
 ```javascript
 {
-  "sport": "baseball_mlb",
-  "markets": ["batter_home_runs", "pitcher_strikeouts"],
-  "team_filter": "Yankees"
+  "sport": "americanfootball_nfl",
+  "markets": ["player_pass_yds", "player_rush_yds"],
+  "team_filter": "Chiefs"
 }
 ```
 
